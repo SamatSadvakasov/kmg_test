@@ -65,3 +65,16 @@ def parsing_folder(folder_path):
                 instance.append(FieldData(start_datetime=item[0], value=item[1], duration=item[2], field_id=field_id))
 
     return save_field_data(instance)
+
+
+def parsing_uploaded_file(file_location, file_name):
+    fmt = '%d.%m.%Y'
+    instance = []
+    filial = file_name.split(',')[0]
+    file = file_name.split(',')[1]
+    field_id = add_field(filial)
+    file_datetime = datetime.strptime(file[:-5], fmt)
+    data = parse_excel(file_location, file_datetime)
+    for item in data:
+        instance.append(FieldData(start_datetime=item[0], value=item[1], duration=item[2], field_id=field_id))
+    return save_field_data(instance)
