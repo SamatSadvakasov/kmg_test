@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
+from datetime import datetime
 from .models import Base, Field, FieldData
 
 engine = create_engine("postgresql+psycopg2://kmg:qwerty123@127.0.0.1:10001/kmg")
@@ -40,9 +41,9 @@ def save_field_data(instances: list):
 
 
 def get_positive_field_data(field_id: int, start, finish) -> list:
-    query = session.query(FieldData).filter(FieldData.field_id == field_id)\
-        .filter(FieldData.start_datetime >= start)\
-        .filter(FieldData.start_datetime <= finish)\
+    query = session.query(FieldData).filter(FieldData.field_id == field_id) \
+        .filter(FieldData.start_datetime >= start) \
+        .filter(FieldData.start_datetime <= finish) \
         .filter(FieldData.value != 0)
     return query.all()
 
@@ -53,3 +54,15 @@ def get_negative_field_data(field_id: int, start, finish) -> list:
         .filter(FieldData.start_datetime <= finish) \
         .filter(FieldData.value == 0)
     return query.all()
+
+
+def get_export_data(field_id: int, export_date: datetime) -> dict:
+    x = []
+    y = []
+    query = session.query(FieldData).filter(FieldData.field_id == field_id)\
+        .filter(FieldData.start_datetime >= export_date)
+
+    for item in query.all():
+        x.append(item.start_datetime)
+        y.append(item.value)
+    return {'x': x, 'y': y}

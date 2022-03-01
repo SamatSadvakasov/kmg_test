@@ -35,3 +35,19 @@ async def create_upload_file(uploaded_file: UploadFile = File(...)):
     parsing_uploaded_file(file_location, uploaded_file.filename)
     return {"info": f"file '{uploaded_file.filename}' saved at '{file_location}'"}
 
+
+@app.get("/export-data")
+def export_data_handle(field_id: int,
+                       marker_size: Optional[str] = "15",
+                       marker_color: Optional[str] = "#EF5350",
+                       type_name: Optional[str] = "scatter",
+                       date: Optional[str] = datetime(2020, 6, 3).strftime("%Y-%m-%d")):
+    """Получить данные месторождения за сутки по идентификатору и дате в заданном виде"""
+    export_date = datetime.strptime(date, "%Y-%m-%d")
+    data = get_export_data(field_id, export_date)
+    data["marker"] = {
+        "size": marker_size,
+        "color": marker_color
+    }
+    data["type"] = type_name
+    return data
