@@ -1,0 +1,16 @@
+version: '3'
+services:
+  db:
+    build:
+      context: ./postgres_container
+      dockerfile: Dockerfile
+    container_name: kmg_db
+    volumes:
+      - ./postgres_container/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=kmg
+      - POSTGRES_PASSWORD=qwerty123
+      - POSTGRES_DB=kmg
+    ports:
+      - "10001:5432"
+    restart: always
