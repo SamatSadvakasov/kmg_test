@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()
 
 
+# Filial (Месторождение)
 class Field(Base):
     __tablename__ = 'fields'
     id = Column(Integer(), primary_key=True)
@@ -13,6 +14,7 @@ class Field(Base):
     __table_args__ = (UniqueConstraint('name', name='uix_name'),)
 
 
+# FilialData  (Данные по Месторождение)
 class FieldData(Base):
     __tablename__ = 'field_data'
     id = Column(Integer(), primary_key=True)
